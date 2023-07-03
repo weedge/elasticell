@@ -1,0 +1,4 @@
+# Use goreman to run `go install github.com/mattn/goreman@latest`
+./bin/cell --log-file=./data/log/cell1.log --pd=127.0.0.1:20801,127.0.0.1:20802,127.0.0.1:20803 --addr=127.0.0.1:60801 --addr-cli=:6371 --zone=zone-1 --rack=rack-1 --data=./data/cell/cell1 --interval-heartbeat-store=5 --interval-heartbeat-cell=2
+./bin/cell --log-file=./data/log/cell2.log --pd=127.0.0.1:20801,127.0.0.1:20802,127.0.0.1:20803 --addr=127.0.0.1:60802 --addr-cli=:6372 --zone=zone-2 --rack=rack-2 --data=./data/cell/cell2 --interval-heartbeat-store=5 --interval-heartbeat-cell=2
+./bin/cell --log-file=./data/log/cell3.log --pd=127.0.0.1:20801,127.0.0.1:20802,127.0.0.1:20803 --addr=127.0.0.1:60803 --addr-cli=:6373 --zone=zone-3 --rack=rack-3 --data=./data/cell/cell3 --interval-heartbeat-store=5 --interval-heartbeat-cell=2

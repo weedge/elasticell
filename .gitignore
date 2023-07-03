@@ -27,6 +27,9 @@ _testmain.go
 *.test
 *.prof
 
+bin/
 dist/
+data/
+*.log
 vendor/github.com/deepfabric/c-nemo
 vendor/github.com/deepfabric/go-nemo

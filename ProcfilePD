@@ -1,0 +1,4 @@
+# Use goreman to run `go install github.com/mattn/goreman@latest`
+./bin/pd --log-file=./data/log/pd1.log --name=pd1 --data=./data/pd/pd1 --addr-rpc=:20801 --urls-client=http://0.0.0.0:2371 --urls-peer=http://127.0.0.1:2381 --initial-cluster=pd1=http://127.0.0.1:2381,pd2=http://127.0.0.1:2382,pd3=http://127.0.0.1:2383
+./bin/pd --log-file=./data/log/pd2.log --name=pd2 --data=./data/pd/pd2 --addr-rpc=:20802 --urls-client=http://0.0.0.0:2372 --urls-peer=http://127.0.0.1:2382 --initial-cluster=pd1=http://127.0.0.1:2381,pd2=http://127.0.0.1:2382,pd3=http://127.0.0.1:2383
+./bin/pd --log-file=./data/log/pd3.log --name=pd3 --data=./data/pd/pd3 --addr-rpc=:20803 --urls-client=http://0.0.0.0:2373 --urls-peer=http://127.0.0.1:2383 --initial-cluster=pd1=http://127.0.0.1:2381,pd2=http://127.0.0.1:2382,pd3=http://127.0.0.1:2383

@@ -1,21 +1,35 @@
 #!/bin/bash
+set -e
 
-ELASTICELL_DIR=/apps/deepfabric
-CFG_DIR=$ELASTICELL_DIR/cfg
-LOG_DIR=$ELASTICELL_DIR/log
+ELASTICELL_DIR=./data
+init() {
+    #make build
+    CFG_DIR=$ELASTICELL_DIR/conf
+    LOG_DIR=$ELASTICELL_DIR/log
+    PD_DATA_DIR=$ELASTICELL_DIR/pd
+    CELL_DATA_DIR=$ELASTICELL_DIR/cell
+    mkdir -p $LOG_DIR
+    mkdir -p $PD_DATA_DIR
+    mkdir -p $CELL_DATA_DIR
+}
 
 start_elasticell_pd() {
-    pd --log-file=$LOG_DIR/pd$1.log --name=pd$1 --data=/apps/deepfabric/pd$1/data --addr-rpc=:2080$1 --urls-client=http://0.0.0.0:237$1 --urls-peer=http://127.0.0.1:238$1 --initial-cluster=pd1=http://127.0.0.1:2381,pd2=http://127.0.0.1:2382,pd3=http://127.0.0.1:2383 &
+    DATA_DIR=$PD_DATA_DIR/pd$1
+    mkdir -p $DATA_DIR
+    ./bin/pd --log-file=$LOG_DIR/pd$1.log --name=pd$1 --data=$DATA_DIR --addr-rpc=:2080$1 --urls-client=http://0.0.0.0:237$1 --urls-peer=http://127.0.0.1:238$1 --initial-cluster=pd1=http://127.0.0.1:2381,pd2=http://127.0.0.1:2382,pd3=http://127.0.0.1:2383 &
 }
 
 start_elasticell_cell() {
-    cell --log-file=$LOG_DIR/cell$1.log --pd=127.0.0.1:20801,127.0.0.1:20802,127.0.0.1:20803 --addr=127.0.0.1:1080$1 --addr-cli=:637$1 --zone=zone-$1 --rack=rack-$1 --data=/apps/deepfabric/cell$1/data --interval-heartbeat-store=5 --interval-heartbeat-cell=2 &
+    DATA_DIR=$CELL_DATA_DIR/cell$1
+    mkdir -p $DATA_DIR
+    ./bin/cell --log-file=$LOG_DIR/cell$1.log --pd=127.0.0.1:20801,127.0.0.1:20802,127.0.0.1:20803 --addr=127.0.0.1:6080$1 --addr-cli=:637$1 --zone=zone-$1 --rack=rack-$1 --data=$DATA_DIR --interval-heartbeat-store=5 --interval-heartbeat-cell=2 &
 }
 
 start_elasticell_proxy() {
-    proxy --cfg=$CFG_DIR/proxy.json
+    ./bin/proxy --cfg=$CFG_DIR/proxy.json
 }
 
+init
 echo "begin to start pd cluster"
 start_elasticell_pd 1
 sleep 1

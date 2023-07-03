@@ -15,21 +15,29 @@ LD_FLAGS              = -ldflags "$(LD_GIT_COMMIT) $(LD_BUILD_TIME) $(LD_GO_VERS
 GOOS 		= linux
 CGO_ENABLED = 0
 DIST_DIR 	= $(ROOT_DIR)dist/
+BIN_DIR = $(ROOT_DIR)bin/
 
 .PHONY: release
 release: dist_dir pd cell proxy;
 
+.PHONY: build 
+build: ; $(info ======== local build all:)
+	rm -rf $(BIN_DIR)*
+	go build -o ./bin/cell  /Users/wuyong/go/src/github.com/weedge/elasticell/cmd/cell/*.go
+	go build -o ./bin/pd  /Users/wuyong/go/src/github.com/weedge/elasticell/cmd/pd/*.go
+	go build -o ./bin/proxy  /Users/wuyong/go/src/github.com/weedge/elasticell/cmd/proxy/*.go
+
 .PHONY: bench
 bench: ; $(info ======== compiled elasticell-pd:)
-	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -mod vendor -a -installsuffix cgo -o $(DIST_DIR)bench $(LD_FLAGS) $(ROOT_DIR)cmd/bench/*.go
+	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -a -installsuffix cgo -o $(DIST_DIR)bench $(LD_FLAGS) $(ROOT_DIR)cmd/bench/*.go
 
 .PHONY: pd
 pd: ; $(info ======== compiled elasticell-pd:)
-	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -mod vendor -a -installsuffix cgo -o $(DIST_DIR)pd $(LD_FLAGS) $(ROOT_DIR)cmd/pd/*.go
+	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -a -installsuffix cgo -o $(DIST_DIR)pd $(LD_FLAGS) $(ROOT_DIR)cmd/pd/*.go
 
 .PHONY: proxy
 proxy: ; $(info ======== compiled elasticell-proxy:)
-	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -mod vendor -a -installsuffix cgo -o $(DIST_DIR)proxy $(LD_FLAGS) $(ROOT_DIR)cmd/proxy/*.go
+	env CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) go build -a -installsuffix cgo -o $(DIST_DIR)proxy $(LD_FLAGS) $(ROOT_DIR)cmd/proxy/*.go
 
 .PHONY: cell
 cell: ; $(info ======== compiled elasticell-cell:)

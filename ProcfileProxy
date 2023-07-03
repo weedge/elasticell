@@ -1,0 +1,2 @@
+# Use goreman to run `go install github.com/mattn/goreman@latest`
+./bin/proxy --cfg=./data/conf/proxy.json
